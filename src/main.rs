@@ -5,10 +5,10 @@ use rocket::response::status;
 use serde::{Deserialize, Serialize};
 
 #[get("/")]
-fn index() -> Status {
-    Status::Accepted
+fn index() -> String {
+    String::from("Hello world")
 }
-
+g
 #[launch]
 fn rocket() -> _ {
     rocket::build()
