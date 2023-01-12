@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 fn index() -> String {
     String::from("Hello world")
 }
-g
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
