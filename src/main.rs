@@ -8,6 +8,7 @@ use rocket::response::status;
 use rocket::serde::json::Json;
 
 mod models;
+mod services;
 
 #[get("/")]
 fn index() -> String {
