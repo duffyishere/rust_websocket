@@ -1,3 +1,4 @@
+use std::ptr::hash;
 use diesel::prelude::*;
 use diesel::PgConnection;
 
