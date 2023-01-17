@@ -1,13 +1,15 @@
+use diesel::PgConnection;
 use rocket::http::Status;
-use crate::models::account::{Account, SignupDTO};
+use crate::db;
+use crate::models::account::{Account, NewAccount};
 use crate::models::response::{Response, ResponseWithStatus};
 
-pub fn signup(data: SignupDTO, connection: DbConn) -> ResponseWithStatus {
+pub fn signup(data: NewAccount, connection: &PgConnection) -> ResponseWithStatus {
     if Account::signup(data, connection) {
         ResponseWithStatus {
             status_code: Status::Ok.code,
             response: Response {
-                message: String::from(message_constants::MESSAGE_SIGNUP_SUCCESS),
+                message: String::from("Signup success."),
                 data: serde_json::to_value("").unwrap(),
             },
         }
@@ -16,7 +18,7 @@ pub fn signup(data: SignupDTO, connection: DbConn) -> ResponseWithStatus {
         ResponseWithStatus {
             status_code: Status::BadRequest.code,
             response: Response {
-                message: String::from(message_constants::MESSAGE_SIGNUP_FAILED),
+                message: String::from("Failed signup."),
                 data: serde_json::to_value("").unwrap(),
             },
         }

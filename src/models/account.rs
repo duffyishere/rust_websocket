@@ -1,6 +1,8 @@
-use std::ptr::hash;
-use diesel::prelude::*;
-use diesel::PgConnection;
+use diesel::{Insertable, PgConnection, Queryable, RunQueryDsl};
+use pwhash::bcrypt;
+use rocket::serde::{Deserialize, Serialize};
+
+use crate::models::account;
 
 #[derive(Serialize, Deserialize, Queryable)]
 pub struct Account {
@@ -10,31 +12,27 @@ pub struct Account {
     pub name: String
 }
 
-#[derive(Serialize, Deserialize, Insertable)]
-pub struct SignupDTO {
+#[derive(Serialize, Deserialize, Queryable)]
+pub struct NewAccount {
     pub uuid: usize,
     pub email: String,
     pub name: String,
     pub password: String,
 }
 
-#[derive(Serialize, Deserialize)]
 pub struct LoginDTO {
     pub email: String,
     pub password: String,
 }
 
 impl Account {
-    pub fn signup(data: SignupDTO, conn: &PgConnection) -> bool {
-        let hashed_pwd = hash(&data.password, DEFAULT_COST).unwrap();
-        let account = SignupDTO {
-            password: hashed_pwd,
+    pub fn signup(data: NewAccount, connection: &PgConnection) -> bool {
+        let hashed_password = bcrypt::hash(data.password).unwrap();
+        let new_account = NewAccount {
+            password: hashed_password,
             ..data
         };
 
-        diesel::insert_into(account)
-            .values(&account)
-            .execute(conn)
-            .is_ok()
+        true
     }
 }

@@ -1,6 +1,6 @@
 use rocket::serde::json::Value;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug)]
 pub struct Response {
     pub message: String,
     pub data: Value,
